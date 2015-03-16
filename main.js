@@ -61,11 +61,18 @@ browse('file', function(files){
       // current hack: make it async, through this setTimeout, any better options?
       setTimeout(function(){ 
         // ideally we should send the line to a worker.
-        var line = data.toString();      
-        debug('Reading ' + first.name + ' -> ' + lineNumber + ' : ' + line);
+        var line = data.toString();
+        var diff = ((new Date()).valueOf() - start);
+        var minutes = Math.floor(diff/1000/60);
+		var seconds = Math.floor(diff/1000)-minutes*60;
+		minutes = minutes.toString();
+		if (minutes.length == 1) minutes = '0'+minutes;
+		seconds = seconds.toString();
+		if (seconds.length == 1) seconds = '0'+seconds;
         
         // this is a damn slow process, we should have a functional approach rather than managing states
-        predict(mode, line, start);
+        predict(mode, line, start);      
+        debug('Time elapsed = '+minutes+':'+seconds+ '<br><br>Reading ' + first.name + ' -> ' + lineNumber + ' : ' + line);
         lineStream.resume();
       }, 1);
     }

@@ -31,16 +31,16 @@ Prediction.prototype.setReducedArrays = function(result) {
 }
 
 Prediction.prototype.handleFast = function(sorted) {
-  if (sorted.length < 2) {
-    this.appendText(sorted[0][0].split('|').join(' -> '));
-  } else {
-    // this is still wrong
-    var currentScore = sorted[sorted.length-1];
-    for (var i = sorted.length-1; i >=0 ; i--) {
-      if (sorted[i][1] < currentScore)
-        break;
-      this.appendText(sorted[i][0].split('|').join(' -> '));
-    }
+  var highestscore=sorted[sorted.length-1][1];
+  var count_bacteria=0;
+  for (var i = sorted.length-1; i >=0 ; i--){
+    if (sorted[i][1]<highestscore) break;
+    count_bacteria+=1;
+    // score should be removed, for debugging purpose only...
+    this.appendText(sorted[i][0].split('|').join(' -> ') + ' (score = '+sorted[i][1] + ')');
+  }
+  if (count_bacteria == 1) {
+      this.stream.end();
   }
 }
 
